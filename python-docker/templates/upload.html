@@ -1,0 +1,115 @@
+<html>
+
+<head>
+   <title>Encryption</title>
+   <script>
+      let files = []
+      let name = ""
+      let type = ""
+      let size = ""
+      let lastModified = ""
+      window.addEventListener('load', (event) => {
+         const fileUploader = document.getElementById('file-uploader');
+
+         fileUploader.addEventListener('change', (event) => {
+            files = event.target.files;
+            console.log('files', files);
+
+            for (const file of files) {
+               name = file.name;
+               type = file.type ? file.type : 'NA';
+               size = file.size;
+               lastModified = file.lastModified;
+               console.log({ file, name, type, size, lastModified });
+            }
+         });
+      })
+      function submitFile() {
+         console.log("inside")
+         var data = new FormData()
+         data.append('file', files[0])
+         data.append('name', name)
+         data.append('type', type)
+         data.append('size', size)
+         data.append('lastModified', lastModified)
+         fetch('http://localhost:5010/encrypt', {
+            method: 'POST',
+            'Content-Type': 'multipart/form-data',
+            body: data,
+            headers: {
+               'lastModified': lastModified,
+               'fileType': type,
+            }
+         })
+            .then(response => response.json())
+            .then(data => {
+               console.log("imm inside")
+               data = data['cipher_text']
+               console.log("data", data)
+               document.getElementById('cipher').innerHTML = " Encrypted Text: " + data
+            })
+      }
+   </script>
+   <style>
+      body {
+         height: 100vh;
+         overflow: hidden;
+         /* display: flex; */
+         align-items: center;
+         justify-content: center;
+         background-color: #05e8ba;
+         background-image: linear-gradient(315deg, #05e8ba 0%, #087ee1 74%);
+      }
+
+      .encrypt {
+         margin: 220px;
+         background: #ffffff;
+         text-align: center;
+         padding-top: 30px;
+         padding-bottom: 30px;
+         border-radius: 30px;
+      }
+
+      .upload1 {
+         border: none;
+         color: white;
+         padding: 9px 22px;
+         font-size: 14px;
+         margin-bottom: 10px;
+         background-color: #087ee1;
+      }
+
+      .btn-grad {
+         background-image: linear-gradient(to right, #7b4397 0%, #dc2430 51%, #7b4397 100%);
+         margin: 10px;
+         padding: 15px 45px;
+         text-align: center;
+         text-transform: uppercase;
+         transition: 0.5s;
+         background-size: 200% auto;
+         color: white;
+         box-shadow: 0 0 20px #eee;
+         border-radius: 10px;
+      }
+
+      .btn-grad:hover {
+         background-position: right center;
+         /* change the direction of the change here */
+         color: #fff;
+         text-decoration: none;
+      }
+   </style>
+</head>
+
+<body>
+   <div class=encrypt>
+      <h2>Encryption</h2>
+      <input type="file" name="file" id="file-uploader" class="upload1" /><br />
+      <button type="submit" onclick="submitFile()" class="btn-grad"> Encrypt </button>
+      <p>
+         <b id="cipher"></b>
+      </p>
+   </div>
+</body>
+
+</html>

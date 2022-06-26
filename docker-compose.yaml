@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  aes:
+    container_name: nivya_aes
+    image: nivya_aes:latest
+    build:
+      context: ./
+      dockerfile: ./python-docker/Dockerfile
+    volumes:
+       - /Volumes/NIVYA SHARED FOLDER:/Volumes/NIVYA SHARED FOLDER
+       - ./python-docker:/home/api
+    # env_file:
+    #   - .env
+    expose:
+      - 5010
+    ports:
+      - 5010:5010
+    restart: always
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "1995:27017"
+    volumes:
+      - mongodb:/data/db
+  
+volumes:
+    mongodb:
