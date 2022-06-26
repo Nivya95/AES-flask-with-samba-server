@@ -28,10 +28,6 @@
          console.log("inside")
          var data = new FormData()
          data.append('file', files[0])
-         data.append('name', name)
-         data.append('type', type)
-         data.append('size', size)
-         data.append('lastModified', lastModified)
          fetch('http://localhost:5010/encrypt', {
             method: 'POST',
             'Content-Type': 'multipart/form-data',

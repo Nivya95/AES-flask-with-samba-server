@@ -27,11 +27,6 @@ def upload_file():
     return render_template('upload.html')
 
 
-@app.route('/decryption')
-def decrypt_data():
-    return render_template('decrypt.html')
-
-
 @app.route('/encrypt', methods=['POST'])
 def encrypt():
     file = request.files['file']
@@ -56,6 +51,11 @@ def encrypt():
     shutil.copy('./'+filename, '/Volumes/NIVYA SHARED FOLDER/')
 
     return jsonify({"cipher_text": cipher_text.decode("utf-8")})
+
+
+@app.route('/decryption')
+def decrypt_data():
+    return render_template('decrypt.html')
 
 
 @app.route('/decrypt', methods=['POST'])
